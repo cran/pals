@@ -5,14 +5,14 @@ options(width=90)
 
 ## ---------------------------------------------------------------------------------------
 require(pals)
-pal.bands(coolwarm, parula, ocean.haline, cubicl, kovesi.rainbow, ocean.phase, brewer.paired(12), stepped,
+pal.bands(coolwarm, parula, ocean.haline, brewer.blues, cubicl, kovesi.rainbow, ocean.phase, brewer.paired(12), stepped,
           main="Colormap suggestions")
 
 ## ---------------------------------------------------------------------------------------
-labs=c('alphabet','alphabet2', 'glasbey','kelly','pal36', 'stepped', 'tol', 'watlington')
+labs=c('alphabet','alphabet2', 'glasbey','kelly','polychrome', 'stepped', 'tol', 'watlington')
 op=par(mar=c(0,5,3,1))
 pal.bands(alphabet(), alphabet2(), glasbey(), kelly(),
-  pal36(), stepped(), tol(), watlington(), labels=labs, show.names=FALSE)
+  polychrome(), stepped(), tol(), watlington(), labels=labs, show.names=FALSE)
 par(op)
 pal.bands(coolwarm, viridis, parula, n=200)
 
@@ -37,7 +37,7 @@ pal.maxdist(p1,p2) # 2.08
 
 ## ---------------------------------------------------------------------------------------
 #pal.cube(cubehelix)
-#pal.cube(pal36())
+#pal.cube(polychrome())
 
 ## ---------------------------------------------------------------------------------------
 op <- par(mfrow=c(1,2), mar=c(1,1,2,2))
@@ -52,7 +52,7 @@ pal.map(brewer.paired, n=12, main="brewer.paired")
 pal.safe(parula, main="parula")
 
 ## ---------------------------------------------------------------------------------------
-pal.scatter(pal36, n=36, main="alphabet")
+pal.scatter(polychrome, n=36, main="alphabet")
 
 ## ---------------------------------------------------------------------------------------
 pal.sineramp(parula, main="parula")
@@ -70,6 +70,7 @@ pal.test(viridis) # dark colors are poor
 
 ## ---------------------------------------------------------------------------------------
 pal.volcano(parula)
+pal.volcano(viridis)
 
 ## ---------------------------------------------------------------------------------------
 pal.zcurve(parula, main="parula")
@@ -84,12 +85,12 @@ ggplot(melt(volcano), aes(x=Var1, y=Var2, fill=value)) +
 
 ## ---------------------------------------------------------------------------------------
 # Discrete
-pal.bands(alphabet, alphabet2, cols25, glasbey, kelly, pal36, stepped, tol, watlington,
+pal.bands(alphabet, alphabet2, cols25, glasbey, kelly, polychrome, stepped, tol, watlington,
           main="Discrete", show.names=FALSE)
 
 
 # Misc
-pal.bands(coolwarm,cubehelix,gnuplot,jet,parula,tol.rainbow)
+pal.bands(coolwarm,warmcool,cubehelix,gnuplot,jet,parula,tol.rainbow)
 
 
 # Niccoli
