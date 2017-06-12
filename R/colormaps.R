@@ -1,6 +1,6 @@
 # colormaps.R
-# Time-stamp: <06 Apr 2017 18:33:36 c:/x/rpack/pals/R/colormaps.R>
-# Copyright: Kevin Wright, 2016. License: GPL-3.
+# Time-stamp: <10 Jun 2017 10:22:57 c:/x/rpack/pals/R/colormaps.R>
+# Copyright: Kevin Wright, 2017. License: GPL-3.
 
 # R auto-loads R/sysdata.rda, which contains the 'syspals' object.
 # You would think that this code should work:
