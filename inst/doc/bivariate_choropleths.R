@@ -7,7 +7,7 @@ options(width=90)
 require(latticeExtra) # USCancerRates, mapplot
 require(maps) # map
 require(classInt) # classIntervals, findCols
-require(grid) # pushViewport
+require(grid) # viewport, pushViewport
 require(pals) # brewer.blues, stevens.pinkgreen
 
 suppressWarnings(print(
@@ -48,12 +48,16 @@ m3 <- mapplot(rownames(USCancerRates) ~ class2, data = USCancerRates,
               scales = list(draw = FALSE))
 suppressWarnings(print( m3 ))
 # add the color legend
+m3leg <- levelplot(matrix(1:(nbins*nbins), nrow=nbins), axes=FALSE, col.regions=cols(),
+                   xlab="male  -->", ylab="female  -->", cuts=8, colorkey=FALSE,
+                   scales=list(draw=0))
 vp <- viewport(x=.15, y=.25, width=.2, height=.2)
 pushViewport(vp)
-print(levelplot(matrix(1:(nbins*nbins), nrow=nbins), axes=FALSE, col.regions=cols(),
-                xlab="male  -->", ylab="female  -->", cuts=8, colorkey=FALSE,
-                scales=list(draw=0)),
-      newpage=FALSE)
+print(m3leg, newpage=FALSE)
 popViewport()
+
+# test
+print(m3, more=TRUE)
+print(m3leg, position=c(.05, .15, .25, .35), more=FALSE)
 
 
