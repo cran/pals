@@ -3,7 +3,7 @@ library("knitr")
 knitr::opts_chunk$set(fig.align="center", fig.width=6, fig.height=6)
 options(width=90)
 
-## ---------------------------------------------------------------------------------------
+## ---- message=FALSE---------------------------------------------------------------------
 require(latticeExtra) # USCancerRates, mapplot
 require(maps) # map
 require(classInt) # classIntervals, findCols

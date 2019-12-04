@@ -9,10 +9,10 @@ pal.bands(coolwarm, parula, ocean.haline, brewer.blues, cubicl, kovesi.rainbow, 
           main="Colormap suggestions")
 
 ## ---------------------------------------------------------------------------------------
-labs=c('alphabet','alphabet2', 'glasbey','kelly','polychrome', 'stepped', 'tol', 'watlington')
+labs=c('alphabet','alphabet2', 'glasbey','kelly','polychrome', 'stepped', 'stepped2', 'stepped3', 'tol', 'watlington')
 op=par(mar=c(0,5,3,1))
 pal.bands(alphabet(), alphabet2(), glasbey(), kelly(),
-  polychrome(), stepped(), tol(), watlington(), labels=labs, show.names=FALSE)
+  polychrome(), stepped(), stepped2(), stepped3(), tol(), watlington(), labels=labs, show.names=FALSE)
 par(op)
 pal.bands(coolwarm, viridis, parula, n=200)
 
@@ -23,17 +23,17 @@ pal.channels(parula, main="parula")
 pal.cluster(alphabet2(), main="alphabet2")
 
 ## ---------------------------------------------------------------------------------------
-pal.csf(parula, main="parula")
-
-## ---------------------------------------------------------------------------------------
-# smooth palettes usually easy to compress
-p1 <- coolwarm(255)
-cool2 <- pal.compress(coolwarm)
-p2 <- colorRampPalette(cool2)(255)
-pal.bands(p1, p2, cool2,
-  labels=c('original','compressed', 'basis'), main="coolwarm")
+# smooth palettes are usually easy to compress
+p1 <- cubehelix(255)
+cubebasis <- pal.compress(cubehelix)
+p2 <- colorRampPalette(cubebasis)(255)
+pal.bands(p1, cubebasis, p2,
+  labels=c('cubehelix(255)', 'cubebasis','expanded'), main="compression of cubehelix")
 pal.maxdist(p1,p2) # 2.08
 
+
+## ---------------------------------------------------------------------------------------
+pal.csf(parula, main="parula")
 
 ## ---------------------------------------------------------------------------------------
 #pal.cube(cubehelix)
@@ -44,6 +44,11 @@ op <- par(mfrow=c(1,2), mar=c(1,1,2,2))
 pal.heatmap(alphabet, n=26, main="alphabet")
 pal.heatmap(alphabet2, n=26, main="alphabet2")
 par(op)
+
+## ---------------------------------------------------------------------------------------
+pal.heatmap2(watlington(16), tol.groundcover(14), brewer.rdylbu(11),
+  nc=6, nr=20,
+  labels=c("watlington","tol.groundcover","brewer.rdylbu"))
 
 ## ---------------------------------------------------------------------------------------
 pal.map(brewer.paired, n=12, main="brewer.paired")
@@ -85,7 +90,7 @@ ggplot(melt(volcano), aes(x=Var1, y=Var2, fill=value)) +
 
 ## ---------------------------------------------------------------------------------------
 # Discrete
-pal.bands(alphabet, alphabet2, cols25, glasbey, kelly, polychrome, stepped, tol, watlington,
+pal.bands(alphabet, alphabet2, cols25, glasbey, kelly, okabe, polychrome, stepped, stepped2, stepped3, tol, watlington,
           main="Discrete", show.names=FALSE)
 
 
@@ -166,25 +171,33 @@ par(op)
 
 
 # Bivariate
-bivcol <- function(pal){
+bivcol <- function(pal, nx=3, ny=3){
   tit <- substitute(pal)
-  pal <- pal()
+  if(is.function(pal)) pal <- pal()
   ncol <- length(pal)
-  nx <- sqrt(length(pal))
-  image(matrix(1:ncol, nrow=sqrt(ncol)), axes=FALSE, col=pal)
+  if(missing(nx)) nx <- sqrt(ncol)
+  if(missing(ny)) ny <- nx
+  image(matrix(1:ncol, nrow=ny), axes=FALSE, col=pal)
   mtext(tit)
 }
-op <- par(mfrow=c(3,4), mar=c(1,1,2,1))
-bivcol(stevens.pinkgreen)
-bivcol(stevens.bluered)
-bivcol(stevens.pinkblue)
-bivcol(stevens.greenblue)
-bivcol(stevens.purplegold)
-bivcol(brewer.orangeblue)
-bivcol(brewer.pinkblue)
-bivcol(tolochko.redblue)
+
+op <- par(mfrow=c(4,4), mar=c(1,1,2,1))
 bivcol(arc.bluepink)
+bivcol(brewer.divbin, nx=3)
+bivcol(brewer.divdiv)
+bivcol(brewer.divseq)
+bivcol(brewer.qualbin, nx=3)
+bivcol(brewer.qualseq)
+bivcol(brewer.seqseq1)
+bivcol(brewer.seqseq2)
 bivcol(census.blueyellow)
+bivcol(stevens.bluered)
+bivcol(stevens.greenblue)
+bivcol(stevens.pinkblue)
+bivcol(stevens.pinkgreen)
+bivcol(stevens.purplegold)
+bivcol(tolochko.redblue)
+bivcol(vsup.redblue, nx=8)
 par(op)
 
 

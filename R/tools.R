@@ -1,5 +1,5 @@
 # tools.R
-# Time-stamp: <22 Jun 2017 19:14:56 c:/x/rpack/pals/R/tools.R>
+# Time-stamp: <30 Oct 2019 08:18:33 c:/x/rpack/pals/R/tools.R>
 # Copyright: Kevin Wright, 2017. License: GPL-3.
 
 # ----------------------------------------------------------------------------
@@ -58,7 +58,7 @@
 #' @export
 pal.bands <- function(..., n=100, labels=NULL, main=NULL, gap=0.1, sort="none", show.names=TRUE){
 
-  if(n < 3) warning("Using n=3")
+  #if(n < 3) warning("Using n=3")
   if(!is.element(sort, c("none","hue","luminance")))
     stop("'sort' must be one of 'none','hue','luminance'")
     
@@ -113,7 +113,8 @@ pal.bands <- function(..., n=100, labels=NULL, main=NULL, gap=0.1, sort="none", 
   on.exit(par(oldpar))
   plot(1, 1, xlim = c(0, maxn), ylim = ylim,
        type = "n", axes = FALSE, bty = "n", xlab = "", ylab = "")
-  
+
+  # draw a band for each palette
   for (i in 1:npal) {
     # i goes bottom to top, npal+1-i goes top to bottom
     nj <- nc[npal+1 - i]
@@ -133,7 +134,7 @@ pal.bands <- function(..., n=100, labels=NULL, main=NULL, gap=0.1, sort="none", 
   }
 
   # Palette name along left side
-  text(rep(-0.1, npal), (1:npal) - 0.6,
+  text(rep(-0.2, npal), (1:npal) - 0.6,
        labels = rev(labels),
        cex=0.6, xpd = TRUE, adj = 1)
 
@@ -275,7 +276,7 @@ pal.cluster <- function(pal, n=50, type="LUV", main=""){
   if(is.null(names(pal))){
     # use hex color
     #labs <- paste0(pal, " [", 1:length(pal), "]")
-    labs <- paste0(" [", 1:length(pal), "]")
+    labs <- paste0(" [", seq_along(pal), "]")
   } else {
     labs <- names(pal)
   }
@@ -328,8 +329,8 @@ pal.cluster <- function(pal, n=50, type="LUV", main=""){
 #' \emph{Journal of Physiology}, 197: 551-566.
 #' 
 #' @export
-pal.csf = function(pal, n=150, main=""){
-  if(is.function(pal)) pal = pal(n)
+pal.csf <- function(pal, n=150, main=""){
+  if(is.function(pal)) pal <- pal(n)
 
   x <- seq(0,5*pi,length=400)
   y <- seq(0,2*pi,length=400)
@@ -359,11 +360,11 @@ pal.csf = function(pal, n=150, main=""){
 #'
 #' @param pal A colormap function or a vector of colors.
 #' 
-#' @param n Initial number of colors to use.
+#' @param n Initial number of colors to use for the basis.
 #' 
 #' @param thresh Maximum allowable Lab distance from original palette
 #' 
-#' @return A vector of colors
+#' @return A vector of equally-spaced colors that form the 'basis' of a colormap.
 #'
 #' @examples
 #' # The 'cm.colors' palette in R compresses to only 3 colors
@@ -396,15 +397,23 @@ pal.csf = function(pal, n=150, main=""){
 #' @export 
 pal.compress <- function(pal, n=5, thresh=2.5) {
   # pal is a function
+
+  # 255 equal-spaced colors from the original palette function
   pal255 <- pal(255)
   
   done <- FALSE
   while(!done) {
-    palc <- colorRampPalette(pal(n))(255) # compressed palette ramp
+    
+    # 255 colors expanded from n colors
+    palc <- colorRampPalette(pal(n))(255)
+
+    # Compare 255 colors from the original palette with
+    #         255 colors using the n basis colors
+    # If they are too far apart, increase n and try again
     p1 <- convertColor(t(col2rgb(pal255)), from="sRGB",to="Lab",scale.in=255)
     p2 <- convertColor(t(col2rgb(palc)), from="sRGB",to="Lab",scale.in=255)
     delta <- max(apply((p1-p2), 1, function(x) sqrt(sum(x^2))))
-    if(delta >  thresh) n=n+1 else done=TRUE
+    if(delta >  thresh) n <- n+1 else done <- TRUE
   }
   return(pal(n))
 }
@@ -432,7 +441,6 @@ pal.compress <- function(pal, n=5, thresh=2.5) {
 #' @param type Either "RGB" (default) or "LUV".
 #' 
 #' @return None
-#' @import rgl
 #' @export 
 #' @examples
 #' \dontrun{
@@ -456,19 +464,21 @@ pal.cube <- function(pal, n=100, label=FALSE, type="RGB"){
 
   if(type=="RGB") {
     x <- t(col2rgb(pal))
-    xl="red"; yl="green"; zl="blue"
+    xl <- "red"; yl <- "green"; zl <- "blue"
   } else if (type=="LUV") {
     luvmat <- methods::as(colorspace::hex2RGB(pal), "LUV")
     x <- luvmat@coords
-    xl="L"; yl="U"; zl="V"
+    xl <- "L"; yl <- "U"; zl <- "V"
   }
 
-  plot3d(x, col=pal,
-         xlab=xl, ylab=yl,zlab=zl,
-         lit=FALSE,
-         size=1.5, type='s')
+  # Note, rgl is deliberately not part of Imports, so we must
+  # explicitly reference the package here.
+  rgl::plot3d(x, col=pal,
+              xlab=xl, ylab=yl,zlab=zl,
+              lit=FALSE,
+              size=1.5, type='s')
   if(label)
-    text3d(x, texts=pal, cex=0.8)
+    rgl::text3d(x, texts=pal, cex=0.8)
 
   invisible()
 }
@@ -566,7 +576,7 @@ pal.maxdist <- function(pal1, pal2, n=255) max(pal.dist(pal1, pal2, n))
 # ----------------------------------------------------------------------------
 # pal.heatmap
 
-#' Show a palette/colormap with a heatmap
+#' Show a palette/colormap with a random heatmap
 #'
 #' 
 #' @param pal A palette function or a vector of colors.
@@ -595,7 +605,7 @@ pal.maxdist <- function(pal1, pal2, n=255) max(pal.dist(pal1, pal2, n))
 pal.heatmap <- function(pal, n=25, miss=.05, main=""){
 
   if(miss >  1)
-    warning("`miss` should be less than 1.")
+    stop("`miss` should be less than 1.")
   
   if(is.function(pal)) {
     pal <- pal(n)
@@ -618,6 +628,7 @@ pal.heatmap <- function(pal, n=25, miss=.05, main=""){
   if(main != "") mtext(main)
   invisible()
 }
+
 
 # ----------------------------------------------------------------------------
 # pal.safe
@@ -811,24 +822,24 @@ pal.sineramp <- function(pal, n=150, nx=512, ny=256,
   # Adjust width of image so there is an integer number of cycles of
   # the sinewave.  Helps for cyclic color palette.
   # May still be a slight discontinuity along the edge.
-  cycles = round(nx/wavelen)
-  nx = cycles*wavelen
+  cycles <- round(nx/wavelen)
+  nx <- cycles*wavelen
   
   # Sine wave
-  xval = 0:(nx-1)
-  fx = amp*sin( 1.0/wavelen * 2*pi*xval)
+  xval <- 0:(nx-1)
+  fx <- amp*sin( 1.0/wavelen * 2*pi*xval)
 
   # Vertical dampening of the wave
-  img = outer(fx, seq(0,1,length=ny), function(x,y) x*y^pow)
+  img <- outer(fx, seq(0,1,length=ny), function(x,y) x*y^pow)
 
   # Add ramp across entire image
-  img = img + outer(seq(0,1,length=nx), seq(1,1,length=ny), '*') * (255-2*amp)
+  img <- img + outer(seq(0,1,length=nx), seq(1,1,length=ny), '*') * (255-2*amp)
 
   # Normalise each row (offset and rescale into [0,1]). Important for cyclic
   # color maps
   img <- apply(img, 2, function(x){
-    x = x - min(x) # set smallest value to 0
-    x = x/max(x) # set largest value to 1
+    x <- x - min(x) # set smallest value to 0
+    x <- x/max(x) # set largest value to 1
     x
   })
 
@@ -961,7 +972,7 @@ pal.volcano <- function(pal, n=100, main=""){
   if(is.function(pal)) {
     pal <- pal(n)
   } else {
-    n=length(pal)
+    n <- length(pal)
   }
   
   #filled.contour(volcano, col=pal, color.palette = pal, n=n+1, asp = 1, axes=0)
@@ -1013,7 +1024,7 @@ pal.volcano <- function(pal, n=100, main=""){
 pal.zcurve <- function(pal, n=64, main=""){
   
   if(!(n %in% c(4,16,64,256))) stop("Value of n can only be one of 4,16,64,256.")
-  if(is.function(pal)) pal=pal(n)
+  if(is.function(pal)) pal <- pal(n)
   nr <- sqrt(n)
   
   # Probably a fancier way with recursion...but this is simpler
@@ -1039,6 +1050,108 @@ pal.zcurve <- function(pal, n=64, main=""){
 
   if(main!="") mtext(main)
   
+  invisible()
+}
+
+# ----------------------------------------------------------------------------
+
+
+#' Show palettes/colormaps with comparison heatmaps
+#'
+#' Draw a heatmap for each palette. Each palette heatmap consists
+#' of a block of randomly-chosen colors, plus a block for each
+#' color with random substitutions of the other colors.
+#' A missing value NA is added to each palette of colors.
+#'
+#' @param ... Palettes/colormaps, each of which is either
+#' (1) a vectors of colors or
+#' (2) a function returning a vector of colors.
+#' 
+#' @param n The number of colors to display for palette functions.
+#' 
+#' @param nc The number of columns in each color block.
+#' 
+#' @param nr The number of rows in each color block.
+#' 
+#' @param labels Vector of labels for palettes
+#' 
+#' @return None
+#' 
+#' @author Kevin Wright
+#' 
+#' @examples 
+#' pal.heatmap2(watlington(16), tol.groundcover(14), brewer.rdylbu(11),
+#'   nc=6, nr=20,
+#'   labels=c("watlington","tol.groundcover","brewer.rdylbu"))
+#' @references 
+#' None
+#' @export 
+pal.heatmap2 <- function(..., n=100, nc=6, nr=20, labels=NULL){
+  # nr = number of rows in block
+  # nc = number of columns
+
+  #if(n < 3) warning("Using n=3")
+    
+  # Each argument in '...' is a palette function or palette vector.
+  # if a function, use n colors
+  # if a vector, use all colors in the palette
+
+  pals <- list(...)
+  isfun <- unlist(lapply(pals, is.function))
+  npal <- length(pals)
+
+  if(!is.null(labels)) {
+    if(length(labels) != npal)
+      stop("Length of labels needs to match number of palettes.")
+  } else {
+    # Get the palette function name, or blank
+    # Once a function is passed as an argument, the name of the function is gone,
+    # so we have to use 'match.call' to get the names
+    mc <- match.call()
+    labels <- unlist(lapply(mc, deparse))
+    labels <- labels[-1] # first item is 'pal.bands'
+    labels <- labels[1:npal] # other arguments n, labels
+    labels <- ifelse(isfun, labels, "")
+  }
+
+  # Now convert the colormap functions to palette vectors
+  for(i in 1:npal) {
+    if(isfun[i]) pals[[i]] <- pals[[i]](n)
+  }
+  # Count the number of boxes for each palette
+  ncols <- unlist(lapply(pals, length))
+
+  #ylim <- c(0, npal)
+  # mgp: The margin line (in mex units) for the axis title, axis labels and axis line.
+  oldpar <- par(mgp = c(1, 0.25, 0), mfrow=c(npal, 1), mar=c(1,2,1,1))
+  on.exit(par(oldpar))
+  #plot(1, 1, xlim = c(0, maxn), ylim = ylim,
+  #     type = "n", axes = FALSE, bty = "n", xlab = "", ylab = "")
+
+  # draw a tile band for each palette
+  # nc is a list of the number of colors, pals is a list of color vectors
+  for (i in 1:npal) { # palette i
+    nci <- ncols[[i]] # number of colors for palette i
+    # first block is all random
+    zmat <- matrix(sample(c(NA, 1:nci), size=nr*nc, replace=TRUE),
+                   nrow=nr, ncol=nc)
+    # another block for each color
+    for (j in 1:nci) {
+      zmatj <- matrix(j, nrow=nr, ncol=nc) # solid color
+      tmp <- as.vector(zmatj[2:(nr-1), 2:(nc-1)]) # interior
+      ix <- seq(from=i+j, to = length(tmp), length=(nci+1))
+      tmp[ix] <- sample(c(NA, 1:nci)) # randomly permute other colors
+      zmatj[2:(nr-1), 2:(nc-1)] <- tmp
+      zmat <- cbind(zmat, zmatj)
+    }
+    image(t(zmat), col=pals[[i]], axes=FALSE)
+    abline(h=seq(from=par()$usr[3], to=par()$usr[4], length=nr+1), col="gray")
+    abline(v=seq(from=par()$usr[1], to=par()$usr[2], length=(nci+1)*nc + 1), col="gray")
+    mtext(labels[i], side=2, line=0)
+  }
+
+  # if(!is.null(main)) title(main)
+
   invisible()
 }
 

@@ -17,16 +17,18 @@ nv.names <- c(reds,grns)
 # Draw the map and color it
 nv.names <- map('county', 'nevada', namesonly=TRUE, plot=FALSE)
 
-# Green/Red
+# green/red
 op <- par(mar=c(0,1,0,1), mfrow=c(1,2))
 nv <- map('county', 'nevada', fill=TRUE,
           col=ifelse(nv.names %in% reds,
-            rgb(206, 60, 17, max=255), rgb(80,164,52, max=255)),
+                     rgb(206, 60, 17, max=255), # red
+                     rgb(80,164,52, max=255)), # green
           projection="mollweide")
-# Red/Green
+# red/green
 nv <- map('county', 'nevada', fill=TRUE,
           col=ifelse(nv.names %in% reds,
-            rgb(80,164,52, max=255), rgb(206, 60, 17, max=255)),
+                     rgb(80,164,52, max=255),
+                     rgb(206, 60, 17, max=255)),
           projection="mollweide")
 par(op)
 
@@ -38,10 +40,19 @@ sum(area.map(nv, regions=grns))
 
 
 ## ----muted------------------------------------------------------------------------------
-op <- par(mar=c(0,1,0,1))
+op <- par(mar=c(0,1,0,1), mfrow=c(1,2))
+# green/tan
 nv <- map('county', 'nevada', fill=TRUE,
           col=ifelse(nv.names %in% reds,
-                     rgb(250, 229, 139, max=255), rgb(204, 246, 186, max=255)),
+                     rgb(250, 229, 139, max=255),
+                     rgb(204, 246, 186, max=255)),
           projection="mollweide")
+# tan/green
+nv <- map('county', 'nevada', fill=TRUE,
+          col=ifelse(nv.names %in% reds,
+                     rgb(204, 246, 186, max=255),
+                     rgb(250, 229, 139, max=255)),
+          projection="mollweide")
+
 par(op)
 

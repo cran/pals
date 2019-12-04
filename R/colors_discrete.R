@@ -1,5 +1,5 @@
-# discrete.R
-# Time-stamp: <05 Dec 2017 22:37:55 c:/x/rpack/pals/R/discrete.R>
+# colors_discrete.R
+# Time-stamp: <25 Sep 2018 16:50:20 c:/x/rpack/pals/R/colors_discrete.R>
 # Copyright Kevin Wright, 2017, GPL-3
 
 #' Discrete palettes
@@ -36,6 +36,11 @@
 #' colors, the purples are not very distinct, color 22 (olive green) is almost
 #' identical to color 2 (black), etc.
 #'
+#' The \code{okabe} palette was design to be (1) clear for both colorblind and
+#' non-colorblind people, (2) vividly colored, and (3) good for screen and printed.
+#' The color-blind simulation tools in R suggest this palette is not as useful
+#' as hoped.
+#' 
 #' The \code{polychrome} palette is also from the Polychrome package.
 #' Colors were given a name from the ISCC-NBS standard.
 #' 
@@ -46,6 +51,9 @@
 #' green hue 80 moved to hue 90. The number of colors within each hue was reduced
 #' from 5 to 4, and gray shades were added.
 #'
+#' \code{stepped2} and \code{stepped3} are from the 'vega' package
+#' https://github.com/vega/vega/wiki/Scales.
+#' 
 #' The \code{tableau20} palette has 10 pairs of dark/light colors that are used by
 #' the Tableau software.
 #' 
@@ -62,8 +70,10 @@
 #' 
 #' @examples
 #'
-#' pal.bands(alphabet, alphabet2, cols25, glasbey, kelly, polychrome,
-#'   stepped, tableau20, tol, watlington)
+#' pal.bands(alphabet, alphabet2, cols25, glasbey, kelly, okabe, polychrome,
+#'   tableau20, tol, watlington)
+#' pal.bands(stepped, stepped2, stepped3)
+#' pal.bands(tol.groundcover)
 #' 
 #' \dontrun{
 #' alphabet()
@@ -76,14 +86,20 @@
 #' 
 #' pal.heatmap(cols25)
 #'
-#' pal.heatmap(glasbey(32))
+#' pal.heatmap(glasbey())
 #' # pal.cube(glasbey, n=32) # Blues are close together
 #'
-#' pal.heatmap(kelly(22)) # too many orange/pink colors
+#' pal.heatmap(kelly()) # too many orange/pink colors
+#'
+#' pal.safe(okabe()) # not great
 #' 
 #' pal.heatmap(polychrome)
 #' 
 #' pal.heatmap(stepped, n=24)
+#'
+#' pal.heatmap(stepped2, n=20)
+#'
+#' pal.heatmap(stepped3, n=20)
 #' 
 #' pal.heatmap(tol, 12)
 #' 
@@ -112,6 +128,11 @@
 #' K. Kelly (1965): Twenty-two colors of maximum contrast.
 #' \emph{Color Eng}., 3(6), 1965.
 #' http://www.iscc.org/pdf/PC54_1724_001.pdf
+#'
+#' Masataka Okabe and Kei Ito (2002).
+#' Color Universal Design (CUD) - How to make figures and presentations
+#' that are friendly to Colorblind people.
+#' http://jfly.iam.u-tokyo.ac.jp/color/
 #' 
 #' Paul Tol (2012). Color Schemes. SRON technical note, SRON/EPS/TN/09-002.
 #' https://personal.sron.nl/~pault/
@@ -248,8 +269,8 @@ kelly <- function(n=22) {
 
 # ----------------------------------------------------------------------------
 
-#' @rdname discrete
 #' @export
+#' @rdname discrete
 polychrome <- function(n=36){
   
   if(n > 36) {
@@ -297,24 +318,53 @@ stepped <- function(n=24) {
 
 #' @export
 #' @rdname discrete
+stepped2 <- function(n=20) {
+  if(n > 20) {
+    message("Only 20 colors are available with 'stepped2'.")
+    n <- 20
+  }
+
+  return(syspals$stepped2[1:n])
+}
+
+
+# ----------------------------------------------------------------------------
+
+#' @export
+#' @rdname discrete
+stepped3 <- function(n=20) {
+  if(n > 20) {
+    message("Only 20 colors are available with 'stepped3'.")
+    n <- 20
+  }
+  
+  return(syspals$stepped3[1:n])
+}
+
+
+# ----------------------------------------------------------------------------
+
+#' @export
+#' @rdname discrete
+okabe <- function(n=8) {
+  if(n > 8) {
+    message("Only 8 colors are available with 'okabe'.")
+    n <- 8
+  }
+  return(syspals$okabe[1:n])
+}
+
+# ----------------------------------------------------------------------------
+
+#' @export
+#' @rdname discrete
 tableau20 = function(n=20) {
   if(n > 20) {
     message("Only 20 colors are available with 'tableau20'.")
     n <- 20
   }
-
-  # (31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),  
-  # (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),  
-  # (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),  
-  # (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),  
-  # (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
   
-  pal <- c("#1F77B4","#AEC7E8","#FF7F0E","#FFBB78","#2CA02C","#98DF8A",
-           "#D62728","#FF9896","#9467BD","#C5B0D5","#8C564B","#C49C94",
-           "#E377C2","#F7B6D2","#7F7F7F","#C7C7C7","#BCBD22","#DBDB8D",
-           "#17BECF","#9EDAE5")
-
-  return(pal[1:n])
+  return(syspals$tableau20[1:n])
 }
 
 # ----------------------------------------------------------------------------
@@ -328,6 +378,25 @@ tol <- function(n=12) {
   }
 
   return(syspals$tol[[n]])
+}
+
+#' @export
+#' @rdname discrete
+tol.groundcover <- function(n=14){
+  if(n > 14) {
+     message("Only 14 colors are available with 'tol.groundcover'")
+    n <- 14
+  }
+
+  pal <- c("#5566AA","#117733","#44AA66","#55AA22","#668822","#99BB55","#558877",
+           "#88BBAA","#AADDCC","#44AA88","#DDCC66","#FFDD44","#FFEE88","#BB0011")
+  
+  names(pal) <- c("water","evergreen needleleaf forest","deciduous needleleaf forest",
+                  "mixed forest","evergreen broadleaf forest", "deciduous broadleaf forest","woodland",
+                  "wooded grassland","grassland","cropland","closed shrubland",
+                  "open shrubland","bare ground","urban and built")
+
+  return(pal[1:n])
 }
 
 # ----------------------------------------------------------------------------
