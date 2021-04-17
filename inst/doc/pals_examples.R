@@ -5,7 +5,7 @@ options(width=90)
 
 ## ---------------------------------------------------------------------------------------
 require(pals)
-pal.bands(coolwarm, parula, ocean.haline, brewer.blues, cubicl, kovesi.rainbow, ocean.phase, brewer.paired(12), stepped,
+pal.bands(coolwarm, parula, ocean.haline, brewer.blues, cubicl, kovesi.rainbow, ocean.phase, brewer.paired(12), stepped, brewer.seqseq2,
           main="Colormap suggestions")
 
 ## ---------------------------------------------------------------------------------------

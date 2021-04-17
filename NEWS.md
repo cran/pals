@@ -1,3 +1,7 @@
+# pals 1.7 - Unpublished
+
+* Added 'turbo' palette.
+
 # pals 1.6 - Dec 2019
 
 * Moved `rgl` from Imports to Suggests to reduce startup load (#2, Kent Johnson).
