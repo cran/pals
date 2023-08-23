@@ -1,7 +1,6 @@
 Package: pals
-Version: 1.7
+Version: 1.8
 Authors@R: person("Kevin","Wright", email="kw.stat@gmail.com", comment=c(ORCID = "0000-0002-0617-8673"), role=c("aut","cre"))
-Date: 2021-04-16
 Title: Color Palettes, Colormaps, and Tools to Evaluate Them
 Description: A comprehensive collection of color palettes, colormaps, and tools to evaluate them.
 URL: https://kwstat.github.io/pals/
@@ -14,11 +13,11 @@ Imports: dichromat, colorspace, graphics, grDevices, mapproj, maps,
         methods, stats
 Suggests: classInt, ggplot2, knitr, latticeExtra, reshape2, rgl,
         rmarkdown, testthat
-License: GPL-3
-RoxygenNote: 7.1.1
+License: MIT + file LICENSE
+RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2021-04-16 22:40:32 UTC; wrightkevi
+Packaged: 2023-08-22 20:43:54 UTC; wrightkevi
 Author: Kevin Wright [aut, cre] (<https://orcid.org/0000-0002-0617-8673>)
 Maintainer: Kevin Wright <kw.stat@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-04-17 05:00:19 UTC
+Date/Publication: 2023-08-23 04:20:05 UTC

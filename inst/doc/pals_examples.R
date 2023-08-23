@@ -9,10 +9,13 @@ pal.bands(coolwarm, parula, ocean.haline, brewer.blues, cubicl, kovesi.rainbow, 
           main="Colormap suggestions")
 
 ## ---------------------------------------------------------------------------------------
-labs=c('alphabet','alphabet2', 'glasbey','kelly','polychrome', 'stepped', 'stepped2', 'stepped3', 'tol', 'watlington')
+require(pals)
 op=par(mar=c(0,5,3,1))
+labs=c('alphabet','alphabet2', 'glasbey','kelly','polychrome', 'stepped', 'stepped2', 'stepped3', 'tol', 'trubetskoy','watlington')
 pal.bands(alphabet(), alphabet2(), glasbey(), kelly(),
-  polychrome(), stepped(), stepped2(), stepped3(), tol(), watlington(), labels=labs, show.names=FALSE)
+          polychrome(), stepped(), stepped2(), stepped3(),
+          tol(), trubetskoy(), 
+          watlington(), labels=labs, show.names=FALSE)
 par(op)
 pal.bands(coolwarm, viridis, parula, n=200)
 
