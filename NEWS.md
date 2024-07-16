@@ -1,7 +1,19 @@
+# pals 1.9 (2024-07-15)
+
+* Better warning if `pal.cube()` is called without `rgl` package installed (#10) By Adam.
+
+* New exported helper function: `pals.maxcolors()` (#5). By @bschilder
+
+* Now using github actions to build documentation.
+
+
 # pals 1.8 (2023-08-20)
 
 * Switch to MIT license.
+
 * Add `trubetskoy` discrete color palette.
+
+* Fix docType issue reported by CRAN.
 
 
 # pals 1.7 (2021-04-17)
@@ -11,7 +23,7 @@
 
 # pals 1.6 (2019-12-04)
 
-* Moved `rgl` from Imports to Suggests to reduce startup load (#2, Kent Johnson).
+* Moved `rgl` from Imports to Suggests to reduce startup load (#4, Kent Johnson).
 
 * Moved `maps` from Depends to Imports.
 
@@ -58,7 +70,7 @@
 
 # pals 0.1 - (2016-07-01)
 
-* Assembling package begins Jul 2016.
+* Began package.
 
 
 # pals 0.0 - (2005-01-01)

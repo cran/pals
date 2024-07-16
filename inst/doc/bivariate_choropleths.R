@@ -3,7 +3,7 @@ library("knitr")
 knitr::opts_chunk$set(fig.align="center", fig.width=6, fig.height=6)
 options(width=90)
 
-## ---- message=FALSE---------------------------------------------------------------------
+## ----message=FALSE----------------------------------------------------------------------
 require(latticeExtra) # USCancerRates, mapplot
 require(maps) # map
 require(classInt) # classIntervals, findCols
@@ -38,7 +38,7 @@ plot(log(rate.female) ~ log(rate.male), data=USCancerRates,
      col=cols()[USCancerRates$class2], pch=19,
      xlim=c(4.5, 6.5), ylim=c(4.0, 6))
 
-## ---- fig.width=8-----------------------------------------------------------------------
+## ----fig.width=8------------------------------------------------------------------------
 m3 <- mapplot(rownames(USCancerRates) ~ class2, data = USCancerRates,
               colramp=cols, breaks=seq(from=0.5, by=1, length=nbins*nbins+1),
               xlab="",

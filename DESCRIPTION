@@ -1,23 +1,26 @@
 Package: pals
-Version: 1.8
-Authors@R: person("Kevin","Wright", email="kw.stat@gmail.com", comment=c(ORCID = "0000-0002-0617-8673"), role=c("aut","cre"))
 Title: Color Palettes, Colormaps, and Tools to Evaluate Them
-Description: A comprehensive collection of color palettes, colormaps, and tools to evaluate them.
+Version: 1.9
+Authors@R: 
+    person("Kevin", "Wright", , "kw.stat@gmail.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0002-0617-8673"))
+Description: A comprehensive collection of color palettes, colormaps, and
+    tools to evaluate them. See Kovesi (2015) <doi:10.48550/arXiv.1509.03700>.
+License: MIT + file LICENSE
 URL: https://kwstat.github.io/pals/
 BugReports: https://github.com/kwstat/pals/issues
-VignetteBuilder: knitr
-Language: en-US
-Encoding: UTF-8
 Depends: R (>= 2.10)
-Imports: dichromat, colorspace, graphics, grDevices, mapproj, maps,
+Imports: colorspace, dichromat, graphics, grDevices, mapproj, maps,
         methods, stats
 Suggests: classInt, ggplot2, knitr, latticeExtra, reshape2, rgl,
         rmarkdown, testthat
-License: MIT + file LICENSE
-RoxygenNote: 7.2.3
+VignetteBuilder: knitr
+Encoding: UTF-8
+Language: en-US
+RoxygenNote: 7.3.1
 NeedsCompilation: no
-Packaged: 2023-08-22 20:43:54 UTC; wrightkevi
-Author: Kevin Wright [aut, cre] (<https://orcid.org/0000-0002-0617-8673>)
+Packaged: 2024-07-16 14:14:31 UTC; wrightkevi
+Author: Kevin Wright [aut, cre, cph] (<https://orcid.org/0000-0002-0617-8673>)
 Maintainer: Kevin Wright <kw.stat@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-08-23 04:20:05 UTC
+Date/Publication: 2024-07-16 22:10:02 UTC
