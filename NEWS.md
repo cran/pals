@@ -1,10 +1,14 @@
+# pals 1.10 (2025.03.06)
+
+* Fix CRAN check notes.
+
 # pals 1.9 (2024-07-15)
 
 * Better warning if `pal.cube()` is called without `rgl` package installed (#10) By Adam.
 
 * New exported helper function: `pals.maxcolors()` (#5). By @bschilder
 
-* Now using github actions to build documentation.
+* Documentation pages now created via Github Actions.
 
 
 # pals 1.8 (2023-08-20)
